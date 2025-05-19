@@ -41,5 +41,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface Hello extends Remote {
-    String sayHello() throws RemoteException;
+    String contarLetras(String texto) throws RemoteException;
+    boolean isPalindromo(String texto) throws RemoteException;
+    String gerarSenhaSegura(int tamanho) throws RemoteException;
+    String converterParaBinario(String texto) throws RemoteException;
+    String frequenciaPalavras(String texto) throws RemoteException;
 }
+

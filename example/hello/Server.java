@@ -36,33 +36,81 @@
  * maintenance of any nuclear facility.
  */
 package example.hello;
-
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.*;
 
 public class Server implements Hello {
 
     public Server() {}
 
-    public String sayHello() {
-        return "Hello, world!";
+    @Override
+    public String contarLetras(String texto) {
+        int vogais = 0, consoantes = 0;
+        texto = texto.toLowerCase().replaceAll("[^a-z]", "");
+        for (char c : texto.toCharArray()) {
+            if ("aeiou".indexOf(c) >= 0)
+                vogais++;
+            else
+                consoantes++;
+        }
+        return "Vogais: " + vogais + ", Consoantes: " + consoantes;
     }
 
-    public static void main(String args[]) {
+    @Override
+    public boolean isPalindromo(String texto) {
+        texto = texto.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        return texto.equals(new StringBuilder(texto).reverse().toString());
+    }
 
+    @Override
+    public String gerarSenhaSegura(int tamanho) {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
+        StringBuilder senha = new StringBuilder();
+        Random rand = new Random();
+        for (int i = 0; i < tamanho; i++) {
+            senha.append(caracteres.charAt(rand.nextInt(caracteres.length())));
+        }
+        return senha.toString();
+    }
+
+    @Override
+    public String converterParaBinario(String texto) {
+        StringBuilder binario = new StringBuilder();
+        for (char c : texto.toCharArray()) {
+            binario.append(String.format("%8s", Integer.toBinaryString(c)).replace(' ', '0')).append(" ");
+        }
+        return binario.toString().trim();
+    }
+
+    @Override
+public String frequenciaPalavras(String texto) {
+    texto = texto.toLowerCase().replaceAll("[^a-zA-Z ]", "");
+    String[] palavras = texto.split("\\s+"); // corrigido também o regex
+    Map<String, Integer> frequencia = new HashMap<>();
+    for (String palavra : palavras) {
+        if (!palavra.isEmpty()) {
+            frequencia.put(palavra, frequencia.getOrDefault(palavra, 0) + 1);
+        }
+    }
+    StringBuilder resultado = new StringBuilder();
+    for (Map.Entry<String, Integer> entry : frequencia.entrySet()) {
+        resultado.append("\"").append(entry.getKey()).append("\": ").append(entry.getValue()).append(", ");
+    }
+    return resultado.length() > 0 ? resultado.substring(0, resultado.length() - 2) : "Nenhuma palavra.";
+}
+
+
+    public static void main(String[] args) {
         try {
             Server obj = new Server();
             Hello stub = (Hello) UnicastRemoteObject.exportObject(obj, 0);
-
-            // Bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.createRegistry(1099);
             registry.bind("Hello", stub);
-
-            System.err.println("Server ready");
+            System.out.println("Servidor pronto!");
         } catch (Exception e) {
-            System.err.println("Server exception: " + e.toString());
+            System.err.println("Erro no servidor: " + e);
             e.printStackTrace();
         }
     }

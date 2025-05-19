@@ -36,28 +36,70 @@
  * maintenance of any nuclear facility.
  */
 package example.hello;
-
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Scanner;
 
 public class Client {
-
-    private Client() {}
-
     public static void main(String[] args) {
-
-        System.out.println("Initiating client");
-        
-        String host = (args.length < 1) ? null : args[0];
         try {
-            Registry registry = LocateRegistry.getRegistry(host);
-            System.out.println("Registry has been located");
+            Registry registry = LocateRegistry.getRegistry("localhost");
             Hello stub = (Hello) registry.lookup("Hello");
-            System.out.println("Found server");
-            String response = stub.sayHello();
-            System.out.println("response: " + response);
+
+            Scanner scanner = new Scanner(System.in);
+            int opcao;
+
+            do {
+                System.out.println("\n--- MENU ---");
+                System.out.println("1 - Contar vogais e consoantes");
+                System.out.println("2 - Verificar se é palíndromo");
+                System.out.println("3 - Gerar senha segura");
+                System.out.println("4 - Converter texto para binário");
+                System.out.println("5 - Frequência de palavras");
+                System.out.println("0 - Sair");
+                System.out.print("Escolha: ");
+                opcao = scanner.nextInt();
+                scanner.nextLine(); // limpa buffer
+
+                switch (opcao) {
+                    case 1:
+                        System.out.print("Digite o texto: ");
+                        String texto1 = scanner.nextLine();
+                        System.out.println(stub.contarLetras(texto1));
+                        break;
+                    case 2:
+                        System.out.print("Digite a string: ");
+                        String texto2 = scanner.nextLine();
+                        System.out.println("É palíndromo? " + stub.isPalindromo(texto2));
+                        break;
+                    case 3:
+                        System.out.print("Digite o tamanho da senha: ");
+                        int tam = scanner.nextInt();
+                        System.out.println("Senha gerada: " + stub.gerarSenhaSegura(tam));
+                        break;
+                    case 4:
+                        System.out.print("Digite o texto para converter em binário: ");
+                        String textoBin = scanner.nextLine();
+                        System.out.println("Texto em binário: " + stub.converterParaBinario(textoBin));
+                        break;
+                    case 5:
+                        System.out.print("Digite o texto: ");
+                        String texto5 = scanner.nextLine();
+                        System.out.println("Frequência: " + stub.frequenciaPalavras(texto5));
+                        break;
+                    case 0:
+                        System.out.println("Encerrando...");
+                        break;
+                    default:
+                        System.out.println("Opção inválida!");
+                        break;
+                }
+
+            } while (opcao != 0);
+
+            scanner.close();
         } catch (Exception e) {
-            System.err.println("Client exception: " + e.toString());
+            System.err.println("Erro no cliente: " + e);
             e.printStackTrace();
         }
     }
