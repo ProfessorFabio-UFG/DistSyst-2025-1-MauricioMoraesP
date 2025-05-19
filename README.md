@@ -1,9 +1,9 @@
 ```markdown
-# 📡 Projeto Java RMI – Sistema Distribuído com Funções Complexas
+📡 Projeto Java RMI – Sistema Distribuído
 
-Este projeto implementa um sistema cliente-servidor utilizando **Java RMI (Remote Method Invocation)**. Ele permite ao cliente interagir com métodos remotos expostos pelo servidor por meio de um menu interativo no terminal.
+Este projeto implementa um sistema cliente-servidor utilizando Java RMI (Remote Method Invocation). Ele permite ao cliente interagir com métodos remotos expostos pelo servidor por meio de um menu interativo no terminal.
 
-## 📌 Funcionalidades disponíveis
+📌 Funcionalidades disponíveis
 
 1. ✅ Contar vogais e consoantes em uma string
 2. ✅ Verificar se uma string é um palíndromo
